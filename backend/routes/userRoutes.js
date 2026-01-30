@@ -20,10 +20,15 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const newUser = new User(req.body);
+        const newUser = new User({
+            ...req.body,
+            progress: { abu: 0, iso: 0, tabanlik: 0 }
+        });
         const savedUser = await newUser.save();
         res.status(201).json(savedUser);
-    } catch (err) { res.status(400).json(err); }
+    } catch (err) { 
+        res.status(400).json(err); 
+    }
 });
 
 router.delete('/:id', async (req, res) => {

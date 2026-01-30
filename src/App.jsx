@@ -6,17 +6,17 @@ import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import ProfilePage from "./pages/ProfilePage";
 
-import { initialUsers } from "./data/usersData";
-
 export default function App() {
-    const [users, setUsers] = useState(initialUsers);
+    const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     
     useEffect(() => {
         const fetchUsers = async () => {
             const response = await fetch("http://localhost:5000/api/users");
-            const data = await response.json();
-            setUsers(data);
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data);
+            }
         };
         if (currentUser?.role === 'admin') fetchUsers();
     }, [currentUser]);

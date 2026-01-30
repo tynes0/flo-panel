@@ -17,17 +17,23 @@ export default function Admin({ users, setUsers, onLogout }) {
     const { toggleTheme } = useTheme();
 
     async function addUser(userData) {
-        const response = await fetch("http://localhost:5000/api/users", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                ...userData,
-                username: userData.email.split('@')[0],
-            })
-        });
-        if (response.ok) {
-            const savedUser = await response.json();
-            setUsers([...users, savedUser]);
+        try {
+            const response = await fetch("http://localhost:5000/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...userData,
+                    username: userData.email.split('@')[0], 
+                    password: userData.password || "123"
+                })
+            });
+
+            if (response.ok) {
+                const savedUser = await response.json();
+                setUsers((prev) => [...prev, savedUser]);
+            }
+        } catch (error) {
+            console.error("Kullanıcı eklenemedi:", error);
         }
     }
 
